@@ -2,7 +2,7 @@
 
     // Setup a Date object at the start of the program. Assign to window so it
     // doesn't need to be passed all through creation to be used.
-    window.programStart = new Date;
+    window.programStart = new Date();
 
     // I forget these numbers so often it's not funny.
     // Put them up top so they get defined before everything gets kicked off.
@@ -76,7 +76,7 @@
             _this.running = true;
             document.getElementById("tickerName").innerHTML = 
                 "... " + getElementValue("tickerNameInput");
-            _this.tickerTimeoutRef = setInterval(_this.tick, 1000);
+            _this.tickerTimeoutRef = setInterval(_this.tick, 100);
         };
 
         _this.stop = function() {
