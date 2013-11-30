@@ -1,11 +1,12 @@
 <html>
 <head>
     <title>Countdown Timer</title>
-    <!--<script type="text/javascript" 
-    src="http://code.jquery.com/jquery-latest.min.js"></script> -->
 
+    <!-- Load the Boostrap CSS styles. -->
     <link rel="stylesheet" href="../lib/css/bootstrap.css"></link>
 
+    <!-- Load jQuery -->
+    <script type="text/javascript" src="../lib/js/jquery.js"></script>
 </head>
 
 <body>
@@ -13,12 +14,17 @@
 <!-- Build the HTML needed with some default values to test against. -->
 <p>Count to:</p>
 <input type="text" id="countToSecond" placeholder="Second" value="0"></input>
-<input type="text" id="countToMinute" placeholder="Minute" value="34"></input>
+<input type="text" id="countToMinute" placeholder="Minute" value="0"></input>
 <input type="text" id="countToHour" placeholder="Hour" value="0"></input>
 <input type="text" id="countToDay" placeholder="Day" value="1"></input>
 <input type="text" id="countToMonth" placeholder="Month" value="1"></input>
 <input type="text" id="countToYear" placeholder="Year" value="2050"></input>
-<input type="text" id="tickerNameInput" placeholder="Name" value="Until the year 2050"></input>
+<input type="text" id="tickerNameInput" placeholder="Name" value="until the year 2050"></input>
+
+<br />
+<button type="button" id="startButton" class="btn btn-primary">Start</button>
+<button type="button" id="stopButton" class="btn btn-warning">Stop</button>
+
 
 <br />
 
@@ -29,5 +35,9 @@
     </div>
 </div>
 </body>
+
 <script type="text/javascript" src="Countdown_Timer.js"></script>
+
+
+
 </html>

@@ -1,8 +1,9 @@
-(function() {
+// Let's do some hacking so we can treat this entire thing like a class.
+(function($) {
 
-    // Setup a Date object at the start of the program. Assign to window so it
+    // Setup a Date object at the start of the program. Assign to this so it
     // doesn't need to be passed all through creation to be used.
-    window.programStart = new Date();
+    this.programStart = new Date();
 
     // I forget these numbers so often it's not funny.
     // Put them up top so they get defined before everything gets kicked off.
@@ -21,28 +22,43 @@
         31  // December
     ];
 
-    var userValues = getUserValues(),
-        nowValues = getNowValues(),
-        start = arrayToSeconds(nowValues),
-        end = arrayToSeconds(userValues),
-        length = end - start
-    ;
+    // Do _this so we can access it from different functions.
+    var ticker;
 
-    debug("userValues = " + userValues);
-    debug("nowValues = " + nowValues);
 
-    // I think we're ready to start.
-    var ticker = new Ticker(length);
-    ticker.start();
+    $("#startButton").click(function() {
+        // Reset the time that start is calculated from to get a fresh value.
+        window.programStart = new Date();
+        var length = calculateDifference();
+        ticker = new Ticker(length);
+        ticker.start();
+    });
+
+    $("#stopButton").click(function() {
+        if (ticker) {
+            ticker.stop();
+        }
+    });
+
+    function calculateDifference() {
+        var userValues = getUserValues(),
+            nowValues = getNowValues(),
+            start = arrayToSeconds(nowValues),
+            end = arrayToSeconds(userValues),
+            length = end - start
+        ;
+
+        return length;
+    }
  
     function getUserValues() {
         return [
-            sanitize(getElementValue('countToSecond')),
-            sanitize(getElementValue('countToMinute')),
-            sanitize(getElementValue('countToHour')),
-            sanitize(getElementValue('countToDay')),
-            sanitize(getElementValue('countToMonth')),
-            sanitize(getElementValue('countToYear'))
+            sanitize($("#countToSecond").val()),
+            sanitize($("#countToMinute").val()),
+            sanitize($("#countToHour").val()),
+            sanitize($("#countToDay").val()),
+            sanitize($("#countToMonth").val()),
+            sanitize($("#countToYear").val())
         ];
     }
 
@@ -59,7 +75,7 @@
         ];
     }
 
-    // I like having this in a 'class' it makes all the boolean values feel like
+    // I like having _this in a 'class' it makes all the boolean values feel like
     // they have somewhere proper to live rather than just the global namespace.
     function Ticker(countLength) {
         var _this = this;
@@ -73,10 +89,18 @@
         }
 
         _this.start = function() {
-            _this.running = true;
-            document.getElementById("tickerName").innerHTML = 
-                "... " + getElementValue("tickerNameInput");
-            _this.tickerTimeoutRef = setInterval(_this.tick, 100);
+            if (_this.canRun) {
+                _this.running = true;
+                $("#tickerName").html("... " + $("#tickerNameInput").val());
+                // Tick straight away to give an instant reaction to the start
+                // button.
+                _this.tick();
+                // Then schedule it.
+                _this.tickerTimeoutRef = setInterval(_this.tick, 1000);
+            }
+            else {
+                throw new Error("You got somethin' wrong, boy!");
+            }
         };
 
         _this.stop = function() {
@@ -86,7 +110,7 @@
         };
 
         _this.finish = function() {
-            console.log("We made it!");
+            alert("We made it!");
         }
 
         _this.tick = function() {
@@ -100,25 +124,15 @@
                 _this.stop();
             }
             else {
-                document.getElementById("tickerStatus").innerHTML = formatted;
+                $("#tickerStatus").html(formatted);
                 _this.count--;
             }
 
         };
     }
 
-    function debug(message) {
-        console.log("DEBUG: " + message);
-    }
-
-    function getElementValue(elementName) {
-        return document.getElementById(elementName).value;
-    }
-
     function arrayToSeconds(values) {
-        var total = values[0],
-            now   = new Date()
-        ;
+        var total = values[0];
 
         // Minutes to seconds.
         total += values[1] * 60;
@@ -130,7 +144,7 @@
         total += values[3] * 24 * 60 * 60;
 
         // Months to seconds.
-        total += values[4] * monthDays[now.getMonth()] * 24 * 60 * 60;
+        total += values[4] * monthDays[window.programStart.getMonth()] * 24 * 60 * 60;
 
         // Years to seconds.
         total += values[5] * getYearDays() * 24 * 60 * 60;
@@ -160,22 +174,28 @@
     }
 
     function formatTime(input) {
-        if (input < 0) {
+        if (input <= 0) {
             return '';
         }
+
         var secondsInYear = 365 * 24 * 60 * 60,
             secondsInDay = 60 * 60 * 24,
             secondsInHour = 60 * 60,
             secondsInMin = 60,
+
             year = Math.floor(input / secondsInYear),
             dleft = input % secondsInYear,
+            
             day = Math.floor(dleft / secondsInDay),
             hleft = input % secondsInDay,
+            
             hour = Math.floor(hleft / secondsInHour),
             sleft = hleft % secondsInHour,
             min = Math.floor(sleft / 60),
+            
             seconds = Math.floor(sleft % 60)
         ;
+
         if (year > 0) {
             return [year, lengthen(day), lengthen(hour), lengthen(min), lengthen(seconds)].join(' : ');
         }
@@ -190,7 +210,8 @@
         }
     }
 
-    // Lengthens a number like 1 to 01. Used in keeping the timer display sane.
+    // Lengthens a number like "1" to "01". Used in keeping the timer display nice
+    // looking.
     function lengthen(number) {
         number = number.toString();
             
@@ -201,4 +222,4 @@
             return number;
         }
     }
-})();
+}).call({}, jQuery);
