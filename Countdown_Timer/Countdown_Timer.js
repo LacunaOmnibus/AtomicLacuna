@@ -42,6 +42,7 @@ function CountdownTimer() {
         }
     };
 
+
     /**
      * Calculated the number of seconds that will be counted down.
      *
@@ -87,24 +88,35 @@ function CountdownTimer() {
         return array.join(' : ');
     };
 
+
+    /**
+     * Gets the current time.
+     *
+     * @return {moment} - an instantiated moment object
+     */
+    self.getNow = function() {
+        return moment(new Date());
+    };
+
+
     /**
      * Renders the formatted time and the description onto the screen.
      *
      * @return {undefined} - nothing
      */
     self.render = function() {
+
         $(self.tickEl).fadeOut(120, function() {
 
-            // Using vanilla DOM here because it faster and I think that it's
-            // important for the value to be changed during the fade for
-            // aesthetic reasons.
             var formattedTime = self.format(self.tickerVal);
             self.tickElObj.html(formattedTime)
 
             // Element is now hidden, so, show it again.
             $(this).fadeIn(120);
         });
-    }
+        
+    };
+
 
     /**
      * Resets a few things.
