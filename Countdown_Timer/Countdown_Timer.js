@@ -108,19 +108,13 @@ function CountdownTimer() {
 
         $(self.tickEl).fadeOut(120, function() {
 
-            // Using vanilla DOM here because it faster and I think that it's
-            // important for the value to be changed during the fade for
-            // aesthetic reasons.
             var formattedTime = self.format(self.tickerVal);
             self.tickElObj.html(formattedTime)
 
             // Element is now hidden, so, show it again.
             $(this).fadeIn(120);
         });
-
-        // TODO: find a reasonable place to put this where it isn't being 
-        // re-rendered each tick.
-        // $(self.descriptionEl).html(self.tickerDescription);
+        
     };
 
 
