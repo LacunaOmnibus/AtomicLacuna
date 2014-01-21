@@ -31,8 +31,10 @@ function CountdownTimer() {
 
         // Store these here so we don't have to keep getting new references to
         // them.
-        self.tickElObj = $(self.tickEl);
-        self.descriptionElObj = $(self.descriptionEl);
+        self.$tickEl = $(self.tickEl);
+        self.$descriptionEl = $(self.descriptionEl);
+
+        self.animate = options.animate ? true : false;
 
         if (options.start) {
             self.startTicking();
@@ -105,15 +107,20 @@ function CountdownTimer() {
      * @return {undefined} - nothing
      */
     self.render = function() {
+        var formattedTime = self.format(self.tickerVal);
 
-        $(self.tickEl).fadeOut(120, function() {
+        if (self.animate) {
+            $(self.tickEl).fadeOut(120, function() {
 
-            var formattedTime = self.format(self.tickerVal);
-            self.tickElObj.html(formattedTime)
+                self.$tickEl.html(formattedTime)
 
-            // Element is now hidden, so, show it again.
-            $(this).fadeIn(120);
-        });
+                // Element is now hidden. Show it again.
+                $(this).fadeIn(120);
+            });
+        }
+        else {
+            self.$tickEl.html(formattedTime);
+        }
         
     };
 
@@ -124,8 +131,8 @@ function CountdownTimer() {
      * @return {undefined} - nothing
      */
     self.reset = function() {
-        self.tickElObj.html(self.defaultTickVal);
-        self.descriptionElObj.html(self.defaultDescriptionVal);
+        self.$tickEl.html(self.defaultTickVal);
+        self.$descriptionEl.html(self.defaultDescriptionVal);
     };
 
 
@@ -141,7 +148,7 @@ function CountdownTimer() {
             self.calculate();
             self.ticker = setInterval(self.tick, 1000);
             self.ticking = true;
-            self.descriptionElObj.html(self.description);
+            self.$descriptionEl.html(self.description);
         }
     };
 
@@ -205,7 +212,8 @@ cdt.init({
     nameEl: 'counterName',
     descriptionEl: 'counterDescription',
     tickerDescription: 'Until the start of Year 9.',
-    start: true
+    start: true,
+    animate: false
 });
 
 // Some basic events, for the time being.
