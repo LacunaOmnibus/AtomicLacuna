@@ -6,21 +6,16 @@
 
 var express = require("express"),
     http = require("http"),
-    port = 5000,
+    port = process.env.PORT || 5000,
     app = express(),
     path = require('path')
 ;
 
 // App Configuration
-app.configure(function () {
-
-    app.use(express.static(path.join(__dirname, '..')));
+app.configure(function() {
     
-    // Complain as loudly as possible when an error occurs.
-    app.use(express.errorHandler({
-        dumpExceptions: true,
-        showStack: true
-    }));
+    // Specify the directory to serve
+    app.use(express.static(path.join(__dirname, '..')));
 });
 
 // Start Node.js app
