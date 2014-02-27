@@ -207,11 +207,12 @@ var cdt = new CountdownTimer();
 
 // Initialize all the things!!!
 cdt.init({
-    countTo: moment("03-02-2014 08-45-00", "DD-MM-YYYY HH-mm-ss"),
+//    countTo: moment("03-02-2014 08-45-00", "DD-MM-YYYY HH-mm-ss"),
+    countTo: moment("01-06-2049 07-03-00", "DD-MM-YYYY HH-mm-ss"),
     tickEl: 'counterStatus',
     nameEl: 'counterName',
     descriptionEl: 'counterDescription',
-    tickerDescription: 'Until the start of Year 9.',
+    tickerDescription: 'Until my 50th birthday.',
     start: true,
     animate: false
 });

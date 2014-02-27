@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <title>Highlighter Test</title>
+
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
+    <script type="text/javascript" src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+</head>
+
+<body>
+
+<pre>
+<code contenteditable="true" id="testCode">
+# This is  highlight.js and  some crappy  stuff I did.
+
+
+$self->do_something_dangerous();
+
+my $thing = $ARGV[0];
+my @arr = 1..10;
+$|++;
+for (@arr) {
+    print "$_... ";
+    sleep 1;
+}
+
+__END__
+
+This is a bunch of random crap that demonstrates this working.
+</code>
+</pre>
+
+<script type="text/javascript">
+
+    hljs.highlightBlock(document.getElementById('testCode'));
+
+</script>
+
+</body>
+</html>
